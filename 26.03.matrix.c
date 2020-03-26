@@ -1,6 +1,7 @@
 #include <stdio.h>                                                                                                                                                                                          /* Eeridel */
 #include <stdlib.h>
 #include <limits.h>
+#include <math.h>
 #define M 10
 #define N 10
 #define L 10
@@ -102,6 +103,36 @@ int main()
     }
 
     printf("\n\nSequence number of the line with the largest number of common: %d\n", com_iM);
+
+    printf("\n4.\n");
+
+    for(i = 0; i < M; i++)
+    {
+        for(j = 0; j < N; j++)
+        {
+            a[i][j] = pow(-1,(rand() % 2)) * (rand() %  L);
+            printf("    a[%d][%d] = %d", i, j, a[i][j]);
+        }
+        printf("\n");
+    }
+
+    for(j = 0; j < N; j++)
+    {
+        temp_min = INT_MAX;
+        for(i = 0; i < M; i++)
+        {
+            if((a[i][j] < temp_min) && (a[i][j] > 0))
+            {
+                temp_min = a[i][j];
+            }
+        }
+        if(temp_min != INT_MAX)
+            min_N[j] = temp_min;
+        else
+            min_N[j] = 0;
+    }
+
+    for(i = 0; i < N; i++) printf("\n    min[0..%d][%d] = %d", M - 1, i, min_N[i]);
 
 
 
