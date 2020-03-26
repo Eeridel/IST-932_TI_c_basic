@@ -8,7 +8,8 @@
 
 int main()
 {
-    int i, j, k, temp_min, temp_max, a[M][N], min_N[N], min_M[M], max_M[M], com_M[M], temp_com, com_iM;
+    int i, j, k, temp_min, temp_max, a[M][N], min_N[N], min_M[M], max_M[M], com_M[M], temp_com, com_iM,
+    all_odd_N, all_odd_iN;
 
     srand(time(NULL));
 
@@ -134,8 +135,20 @@ int main()
 
     for(i = 0; i < N; i++) printf("\n    min[0..%d][%d] = %d", M - 1, i, min_N[i]);
 
+    printf("\n5.\n");
 
-
+    for(j = N, all_odd_iN = N; j > 0; j--)
+    {
+        for(i = 0, all_odd_N = 1; i < M; i++)
+        {
+            if((a[i][j] % 2) == 0) all_odd_N = 0;
+        }
+        if(all_odd_N == 1) all_odd_iN = j;
+    }
+    if(all_odd_iN != N)
+        printf("\n\nSequence number of the column with all odd numbers: %d\n", all_odd_iN);
+    else
+        printf("\n\nThere is no column with all odd numbers!");
 
 
 
