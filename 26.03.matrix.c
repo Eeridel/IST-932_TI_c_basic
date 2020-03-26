@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <math.h>
-#define M 10
-#define N 10
-#define L 10
+#define M 3
+#define N 3
+#define L 5
 
 int main()
 {
     int i, j, k, temp_min, temp_max, a[M][N], min_N[N], min_M[M], max_M[M], com_M[M], temp_com, com_iM,
-    all_odd_N, all_odd_iN;
+    all_odd_N, all_odd_iN, com_line;
 
     srand(time(NULL));
 
@@ -23,7 +23,6 @@ int main()
         }
         printf("\n");
     }
-
     for(j = 0; j < N; j++)
     {
         temp_min = INT_MAX;
@@ -39,6 +38,7 @@ int main()
     for(i = 0; i < N; i++) printf("\n    min[0..%d][%d] = %d", M - 1, i, min_N[i]);
 
     printf("\n2.\n");
+    printf("\nMinimal and Maximum items shift:\n\n");
     for(i = 0; i < M; i++)
     {
         temp_max = INT_MIN;
@@ -68,7 +68,6 @@ int main()
                 a[i][j] = min_M[i];
         }
     }
-
     for(i = 0; i < M; i++)
     {
         for(j = 0; j < N; j++)
@@ -79,7 +78,6 @@ int main()
     }
 
     printf("\n3.\n");
-
     for(k = 0; k < M; k++)
     {
         for(i = 0, com_M[k] = 1; i < N; i++)
@@ -91,9 +89,7 @@ int main()
             }
         }
     }
-
     for(i = 0; i < N; i++) printf("\n    com_M[%d] = %d", i, com_M[i]);
-
     for(i = 0, temp_max = INT_MIN; i < M; i++)
     {
         if(com_M[i] > temp_max)
@@ -102,11 +98,9 @@ int main()
             com_iM = i;
         }
     }
-
     printf("\n\nSequence number of the line with the largest number of common: %d\n", com_iM);
 
     printf("\n4.\n");
-
     for(i = 0; i < M; i++)
     {
         for(j = 0; j < N; j++)
@@ -116,7 +110,6 @@ int main()
         }
         printf("\n");
     }
-
     for(j = 0; j < N; j++)
     {
         temp_min = INT_MAX;
@@ -132,11 +125,20 @@ int main()
         else
             min_N[j] = 0;
     }
-
-    for(i = 0; i < N; i++) printf("\n    min[0..%d][%d] = %d", M - 1, i, min_N[i]);
+    for(i = 0; i < N; i++)
+    if(min_N[i] == 0) printf("\n There is no positive numbers in line %d", i);
+            else printf("\n    min[0..%d][%d] = %d", M - 1, i, min_N[i]);
 
     printf("\n5.\n");
-
+    for(i = 0; i < M; i++)
+    {
+        for(j = 0; j < N; j++)
+        {
+            a[i][j] = rand() % L;
+            printf("    a[%d][%d] = %d", i, j, a[i][j]);
+        }
+        printf("\n");
+    }
     for(j = N, all_odd_iN = N; j > 0; j--)
     {
         for(i = 0, all_odd_N = 1; i < M; i++)
@@ -148,9 +150,26 @@ int main()
     if(all_odd_iN != N)
         printf("\n\nSequence number of the column with all odd numbers: %d\n", all_odd_iN);
     else
-        printf("\n\nThere is no column with all odd numbers!");
+        printf("\nThere is no column with all odd numbers!\n");
 
-
+    printf("\n6.\n");
+    printf("\nCommon lines    ");
+    for(i = 0; i < M; i++)
+        for(j = i + 1; j < M; j++)
+        {
+            for(k = 0, com_line = 1; k < N; k++)
+                if(a[i][k] != a[j][k])
+                {
+                    com_line = 0;
+                }
+            if(com_line == 1)
+            {
+                printf("YES\n");
+                goto com_lines_i_end;
+            }
+        }
+    printf("NO\n");
+    com_lines_i_end:
 
     return 0;
 }
