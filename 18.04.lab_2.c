@@ -187,6 +187,7 @@ int main()
                                             }
                                         if(!n) printf("     Nothing!\n");
                                     }break;
+                                    default: printf("Wrong command!\n\n");
                             }
                         }
                     else printf("There is no any Player. Create a first one!\n\n");
