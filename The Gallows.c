@@ -40,7 +40,7 @@ void PageUp()
 
 void BrkPnt()
 {
-    printf("\nНажмите любую клавишу, чтобы продолжить");
+    printf("\nНажмите любую клавишу, чтобы продолжить...");
     getch();
     system("cls");
 }
@@ -280,14 +280,20 @@ void DictCtrl()
     system("cls");
 }
 
-void GameRndr(char* sWordMask, int attmpt, int bWin)
+void GameRndr(char* sWord, char* sWordMask, int attmpt, int bWin)
 {
     PageUp();
     printf("Прогресс: %s", sWordMask);
-    printf("\nОсталось попыток: %d", attmpt);
-    printf("\nВведите букву: ");
-    if(bWin) printf("\nПобеда!");
-    if(!attmpt) printf("\nПоражение.");
+    printf("\nОсталось попыток: %d\n", attmpt);
+    if(bWin)
+    {
+        printf("\nПобеда!");
+    }
+    if(!attmpt)
+    {
+        printf("\nПоражение.");
+        printf("\nВы не угадали слово \"%s\".", sWord);
+    }
 }
 
 void GameCtrl()
@@ -308,9 +314,9 @@ void GameCtrl()
         strcpy(sWordMask, sDict[n]);
         DictFree(sDict);
         char ch;
-        for(i = 1; i < (wlen - 1); i++) sWordMask[i] = '_';
+        for(i = 1; i < (wlen - 1); i++) if( (sWordMask[i] != sWord[0]) && (sWordMask[i] != sWord[wlen]) ) sWordMask[i] = '_';
         int bWin = 0, attmpt = 5, bGuess;
-        GameRndr(sWordMask, attmpt, bWin);
+        GameRndr(sWord, sWordMask, attmpt, bWin);
         while(!bWin && attmpt)
         {
             for(;;)
@@ -332,7 +338,7 @@ void GameCtrl()
                 }
             if(!bGuess) --attmpt;
             if(!strcmp(sWord, sWordMask)) bWin = 1;
-            GameRndr(sWordMask, attmpt, bWin);
+            GameRndr(sWord, sWordMask, attmpt, bWin);
         }
         free(sWord);
         free(sWordMask);
