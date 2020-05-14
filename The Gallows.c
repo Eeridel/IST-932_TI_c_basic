@@ -25,7 +25,7 @@ FILE* OpenDict(const char* mode)
     FILE* fDict;
     char fName[] = "Dictionary.bin";
     if( !(fDict = fopen(fName, mode)) )
-    ErrPrint(EIO, "Нет доступа к файлу ""Dictionary.bin""");
+    ErrPrint(EIO, "РќРµС‚ РґРѕСЃС‚СѓРїР° Рє С„Р°Р№Р»Сѓ ""Dictionary.bin""");
     return(fDict);
 }
 
@@ -40,41 +40,41 @@ void PageUp()
 
 void BrkPnt()
 {
-    printf("\nНажмите любую клавишу, чтобы продолжить...");
+    printf("\nРќР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ, С‡С‚РѕР±С‹ РїСЂРѕРґРѕР»Р¶РёС‚СЊ...");
     getch();
     system("cls");
 }
 
-int WordNum; /* Глобальная переменная для освобождения RAM под словарь */
+int WordNum; /* Р“Р»РѕР±Р°Р»СЊРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ РѕСЃРІРѕР±РѕР¶РґРµРЅРёСЏ RAM РїРѕРґ СЃР»РѕРІР°СЂСЊ */
 char** DictMem()
 {
-    /* Создание файла */
+    /* РЎРѕР·РґР°РЅРёРµ С„Р°Р№Р»Р° */
     FILE* fDict = OpenDict("ab");
     fclose(fDict);
 
-    /* Определение размера файла */
+    /* РћРїСЂРµРґРµР»РµРЅРёРµ СЂР°Р·РјРµСЂР° С„Р°Р№Р»Р° */
     fDict = OpenDict("rb");
     fseek(fDict, 0, SEEK_END);
     long DictSize = ftell(fDict);
     fclose(fDict);
 
-    /* Если размер не ноль, поместить словарь в RAM */
+    /* Р•СЃР»Рё СЂР°Р·РјРµСЂ РЅРµ РЅРѕР»СЊ, РїРѕРјРµСЃС‚РёС‚СЊ СЃР»РѕРІР°СЂСЊ РІ RAM */
     if(DictSize)
     {
         fDict = OpenDict("rb");
 
-        /* Выделение RAM под вспомогательные переменные */
+        /* Р’С‹РґРµР»РµРЅРёРµ RAM РїРѕРґ РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ */
         int i; char ch;
 
-        /* Определение количества слов */
+        /* РћРїСЂРµРґРµР»РµРЅРёРµ РєРѕР»РёС‡РµСЃС‚РІР° СЃР»РѕРІ */
         for(WordNum = 0; fread(&ch, sizeof(char), 1, fDict);)
             if(!ch) ++WordNum;
 
-        /* Выделение RAM под свободный массив и его маску */
+        /* Р’С‹РґРµР»РµРЅРёРµ RAM РїРѕРґ СЃРІРѕР±РѕРґРЅС‹Р№ РјР°СЃСЃРёРІ Рё РµРіРѕ РјР°СЃРєСѓ */
         int* WordLen = (int*)   malloc(sizeof(int)   * WordNum);
         char** sDict = (char**) malloc(sizeof(char*) * WordNum);
 
-        /* Заполнение маски свободного массива */
+        /* Р—Р°РїРѕР»РЅРµРЅРёРµ РјР°СЃРєРё СЃРІРѕР±РѕРґРЅРѕРіРѕ РјР°СЃСЃРёРІР° */
         fseek(fDict, 0, SEEK_SET);
         for(WordNum = 0, i = 0; fread(&ch, sizeof(char), 1, fDict);)
         {
@@ -87,7 +87,7 @@ char** DictMem()
             }
         }
 
-        /* Заполнение свободного массива */
+        /* Р—Р°РїРѕР»РЅРµРЅРёРµ СЃРІРѕР±РѕРґРЅРѕРіРѕ РјР°СЃСЃРёРІР° */
         fseek(fDict, 0, SEEK_SET);
         for(i = 0; i < WordNum; ++i)
         {
@@ -98,7 +98,7 @@ char** DictMem()
 
         fclose(fDict);
         return(sDict);
-    }   /* Если размер файла ноль, вернуть нулевой адрес */
+    }   /* Р•СЃР»Рё СЂР°Р·РјРµСЂ С„Р°Р№Р»Р° РЅРѕР»СЊ, РІРµСЂРЅСѓС‚СЊ РЅСѓР»РµРІРѕР№ Р°РґСЂРµСЃ */
     else
         return(NULL);
 }
@@ -117,16 +117,16 @@ void DictPrint()
     int i;
     if(sDict)
     {
-        printf("*Все слова*");
+        printf("*Р’СЃРµ СЃР»РѕРІР°*");
         for(i = 0; i < WordNum; ++i)
             if(sDict[i][0] != 32)
             printf("\n%d) %s", i, sDict[i]);
-        printf("\n\n*Свободные ячейки*");
+        printf("\n\n*РЎРІРѕР±РѕРґРЅС‹Рµ СЏС‡РµР№РєРё*");
         for(i = 0; i < WordNum; ++i)
             if(sDict[i][0] == 32)
-            printf("\n%d) Места в ячейке: %d букв", i, strlen(sDict[i]) );
+            printf("\n%d) РњРµСЃС‚Р° РІ СЏС‡РµР№РєРµ: %d Р±СѓРєРІ", i, strlen(sDict[i]) );
         DictFree(sDict);
-    } else printf("Словарь пуст. Вы можете добавить слова в меню словаря.");
+    } else printf("РЎР»РѕРІР°СЂСЊ РїСѓСЃС‚. Р’С‹ РјРѕР¶РµС‚Рµ РґРѕР±Р°РІРёС‚СЊ СЃР»РѕРІР° РІ РјРµРЅСЋ СЃР»РѕРІР°СЂСЏ.");
     BrkPnt();
 }
 
@@ -161,7 +161,7 @@ char* WordMem()
 
 void AddWord()
 {
-    printf("Введите слово, которое нужно добавить: ");
+    printf("Р’РІРµРґРёС‚Рµ СЃР»РѕРІРѕ, РєРѕС‚РѕСЂРѕРµ РЅСѓР¶РЅРѕ РґРѕР±Р°РІРёС‚СЊ: ");
     char*  sWord = WordMem();
     char** sDict = DictMem();
     int i;
@@ -200,16 +200,16 @@ void AddWord()
             fwrite(sWord, sizeof(char), strlen(sWord) + 1, fDict);
             fclose(fDict);
         }
-        printf("Слово \"%s\" успешно добавлено!", sWord);
+        printf("РЎР»РѕРІРѕ \"%s\" СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅРѕ!", sWord);
     }
-    else printf("Слово не было добавлено!");
+    else printf("РЎР»РѕРІРѕ РЅРµ Р±С‹Р»Рѕ РґРѕР±Р°РІР»РµРЅРѕ!");
     free(sWord);
     BrkPnt();
 }
 
 void DeleteWord()
 {
-    printf("Введите слово, которое нужно удалить: ");
+    printf("Р’РІРµРґРёС‚Рµ СЃР»РѕРІРѕ, РєРѕС‚РѕСЂРѕРµ РЅСѓР¶РЅРѕ СѓРґР°Р»РёС‚СЊ: ");
     int i;
     char*  sWord = WordMem();
     char** sDict = DictMem();
@@ -229,16 +229,16 @@ void DeleteWord()
                     fseek(fDict, -1, SEEK_CUR);
                     for(j = 0; j < strlen(sWord); ++j) putc(32, fDict);
                     fclose(fDict);
-                    printf("Слово \"%s\" успешно удалено!", sWord);
+                    printf("РЎР»РѕРІРѕ \"%s\" СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅРѕ!", sWord);
                     break;
                 }
             ++i;
-            if(i > WordNum) printf("Слово \"%s\" не найдено в словаре!", sWord);
+            if(i > WordNum) printf("РЎР»РѕРІРѕ \"%s\" РЅРµ РЅР°Р№РґРµРЅРѕ РІ СЃР»РѕРІР°СЂРµ!", sWord);
         }
-        else printf("Слово не было введено.");
+        else printf("РЎР»РѕРІРѕ РЅРµ Р±С‹Р»Рѕ РІРІРµРґРµРЅРѕ.");
         DictFree(sDict);
     } else
-        printf("Словарь пуст. Вы можете добавить слова в меню словаря.");
+        printf("РЎР»РѕРІР°СЂСЊ РїСѓСЃС‚. Р’С‹ РјРѕР¶РµС‚Рµ РґРѕР±Р°РІРёС‚СЊ СЃР»РѕРІР° РІ РјРµРЅСЋ СЃР»РѕРІР°СЂСЏ.");
     free(sWord);
     BrkPnt();
 }
@@ -246,10 +246,10 @@ void DeleteWord()
 void DictRndr(int crs)
 {
     PageUp();
-    printf("\n%15s", "*Словарь*"           );
-    printf("\n%20s", "Показать все слова"); if(!crs)     printf("%3s", "<-"); else printf("%3s", "");
-    printf("\n%20s", "Добавить слово"    ); if(crs == 1) printf("%3s", "<-"); else printf("%3s", "");
-    printf("\n%20s", "Удалить слово"     ); if(crs == 2) printf("%3s", "<-"); else printf("%3s", "");
+    printf("\n%15s", "*РЎР»РѕРІР°СЂСЊ*"           );
+    printf("\n%20s", "РџРѕРєР°Р·Р°С‚СЊ РІСЃРµ СЃР»РѕРІР°"); if(!crs)     printf("%3s", "<-"); else printf("%3s", "");
+    printf("\n%20s", "Р”РѕР±Р°РІРёС‚СЊ СЃР»РѕРІРѕ"    ); if(crs == 1) printf("%3s", "<-"); else printf("%3s", "");
+    printf("\n%20s", "РЈРґР°Р»РёС‚СЊ СЃР»РѕРІРѕ"     ); if(crs == 2) printf("%3s", "<-"); else printf("%3s", "");
     printf("\n");
 }
 
@@ -283,16 +283,16 @@ void DictCtrl()
 void GameRndr(char* sWord, char* sWordMask, int attmpt, int bWin)
 {
     PageUp();
-    printf("Прогресс: %s", sWordMask);
-    printf("\nОсталось попыток: %d\n", attmpt);
+    printf("РџСЂРѕРіСЂРµСЃСЃ: %s", sWordMask);
+    printf("\nРћСЃС‚Р°Р»РѕСЃСЊ РїРѕРїС‹С‚РѕРє: %d\n", attmpt);
     if(bWin)
     {
-        printf("\nПобеда!");
+        printf("\nРџРѕР±РµРґР°!");
     }
     if(!attmpt)
     {
-        printf("\nПоражение.");
-        printf("\nВы не угадали слово \"%s\".", sWord);
+        printf("\nРџРѕСЂР°Р¶РµРЅРёРµ.");
+        printf("\nР’С‹ РЅРµ СѓРіР°РґР°Р»Рё СЃР»РѕРІРѕ \"%s\".", sWord);
     }
 }
 
@@ -342,17 +342,17 @@ void GameCtrl()
         }
         free(sWord);
         free(sWordMask);
-    } else printf("Словарь пуст. Вы можете добавить слова в меню словаря.");
+    } else printf("РЎР»РѕРІР°СЂСЊ РїСѓСЃС‚. Р’С‹ РјРѕР¶РµС‚Рµ РґРѕР±Р°РІРёС‚СЊ СЃР»РѕРІР° РІ РјРµРЅСЋ СЃР»РѕРІР°СЂСЏ.");
     BrkPnt();
 }
 
 void MenuRndr(int crs)
 {
     PageUp();
-    printf("\n%15s", "*Главное меню*");
-    printf("\n%15s", "Начать игру"   ); if(!crs)     printf("%3s", "<-"); else printf("%3s", "");
-    printf("\n%15s", "Словарь"       ); if(crs == 1) printf("%3s", "<-"); else printf("%3s", "");
-    printf("\n%15s", "Выйти"         ); if(crs == 2) printf("%3s", "<-"); else printf("%3s", "");
+    printf("\n%15s", "*Р“Р»Р°РІРЅРѕРµ РјРµРЅСЋ*");
+    printf("\n%15s", "РќР°С‡Р°С‚СЊ РёРіСЂСѓ"   ); if(!crs)     printf("%3s", "<-"); else printf("%3s", "");
+    printf("\n%15s", "РЎР»РѕРІР°СЂСЊ"       ); if(crs == 1) printf("%3s", "<-"); else printf("%3s", "");
+    printf("\n%15s", "Р’С‹Р№С‚Рё"         ); if(crs == 2) printf("%3s", "<-"); else printf("%3s", "");
     printf("\n");
 }
 
