@@ -12,6 +12,7 @@
 #define down    80
 #define enter   13
 #define esc     27
+#define space   32
 
 void ErrPrint(int ErrCode, const char* Message)
 {
@@ -119,11 +120,11 @@ void DictPrint()
     {
         printf("*Все слова*");
         for(i = 0; i < WordNum; ++i)
-            if(sDict[i][0] != 32)
+            if(sDict[i][0] != space)
             printf("\n%d) %s", i, sDict[i]);
         printf("\n\n*Свободные ячейки*");
         for(i = 0; i < WordNum; ++i)
-            if(sDict[i][0] == 32)
+            if(sDict[i][0] == space)
             printf("\n%d) Места в ячейке: %d букв", i, strlen(sDict[i]) );
         DictFree(sDict);
     } else printf("Словарь пуст. Вы можете добавить слова в меню словаря.");
@@ -172,7 +173,7 @@ void AddWord()
         {
             for(i = 0; i < WordNum; ++i)
             {
-                if( (sDict[i][0] == 32) && (strlen(sDict[i]) == strlen(sWord)) )
+                if( (sDict[i][0] == space) && (strlen(sDict[i]) == strlen(sWord)) )
                 {
                     FILE* fDict = OpenDict("r+b");
                     char ch;
@@ -227,7 +228,7 @@ void DeleteWord()
                     while( fread(&ch, sizeof(char), 1, fDict) && (j != i) )
                         if(!ch) ++j;
                     fseek(fDict, -1, SEEK_CUR);
-                    for(j = 0; j < strlen(sWord); ++j) putc(32, fDict);
+                    for(j = 0; j < strlen(sWord); ++j) putc(space, fDict);
                     fclose(fDict);
                     printf("Слово \"%s\" успешно удалено!", sWord);
                     break;
@@ -306,7 +307,7 @@ void GameCtrl()
         do
         {
             n = rand() % WordNum;
-        } while(sDict[n][0] == 32);
+        } while(sDict[n][0] == space);
         wlen = strlen(sDict[n]);
         char* sWord     = (char*) malloc(sizeof(char) * (wlen + 1) );
         char* sWordMask = (char*) malloc(sizeof(char) * (wlen + 1) );
