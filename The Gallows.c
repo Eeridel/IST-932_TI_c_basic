@@ -30,20 +30,23 @@ FILE* OpenDict(const char* mode)
     return(fDict);
 }
 
-void PageUp()
+void PageUp() /* Функция перемещения курсора в самое начало */
 {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD  position;
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); /* Получение дескриптора для экранного буфера консоли */
+    COORD position; /* Структура COORD, которая устанавливает новую позицию курсора */
     position.X = 0;
     position.Y = 0;
-    SetConsoleCursorPosition(hConsole, position);
+    /* Функция SetConsoleCursorPosition устанавливает позицию курсора в заданном экранном буфере консоли. */
+    SetConsoleCursorPosition(hConsole, position); 
 }
 
 void BrkPnt()
 {
     printf("\nНажмите любую клавишу, чтобы продолжить...");
-    getch();
-    system("cls");
+    /* Функция для получения символа на ввод.*/
+    /* В этой функции она необходима, чтобы приостановить программу, пока не будет нажата клавиша */
+    getch(); 
+    system("cls"); /* Функция очистки экранного буфера консоли */
 }
 
 int WordNum; /* Глобальная переменная для освобождения RAM под словарь */
